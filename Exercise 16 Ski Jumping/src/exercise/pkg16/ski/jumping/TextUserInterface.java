@@ -7,6 +7,7 @@ package exercise.pkg16.ski.jumping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -16,7 +17,8 @@ import java.util.Scanner;
 public class TextUserInterface {
     private Scanner reader;
     private final List<Skiier> skiier = new ArrayList<>();  
-    public TextUserInterface() {
+    public TextUserInterface(Scanner reader) {
+        this.reader = reader;
     }
     
     public void start(){
@@ -32,6 +34,27 @@ public class TextUserInterface {
             }
             else{
                 skiier.add(new Skiier(input));
+            }
+        }
+        System.out.println("The tournament begins");
+        System.out.println();
+        System.out.println("Write 'jump' or else quit");
+        
+        int i = 0;
+        while(true){
+            Jumps jump = new Jumps();
+            String input=reader.nextLine();System.out.println();
+            if(input.equals("jump")){
+                jump.startJump(i);
+                jump.printSkiiers(skiier);
+                Random rand = new Random();
+                int jumps = rand.nextInt(100) + 60;
+                int votes = rand.nextInt(20) + 10;
+                
+                
+            }
+            else{
+                break;
             }
         }
     }
