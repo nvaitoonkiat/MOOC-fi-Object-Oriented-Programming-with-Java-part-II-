@@ -6,6 +6,7 @@
 package exercise.pkg16.ski.jumping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -28,7 +29,7 @@ public class TextUserInterface {
         System.out.println("Write the names of the participants:");
         while(true){
             System.out.print("Participant name:");
-            String input=reader.nextLine();System.out.println();
+            String input=reader.nextLine();
             if(input.equals("")){
                 break;
             }
@@ -36,24 +37,27 @@ public class TextUserInterface {
                 skiier.add(new Skiier(input));
             }
         }
-        System.out.println("The tournament begins");
         System.out.println();
-        System.out.println("Write 'jump' or else quit");
+        System.out.println("The tournament begins");
         
-        int i = 0;
+        
+        
+        int round = 1;
         while(true){
+            System.out.println("Write 'jump' or else quit");
             Jumps jump = new Jumps();
             String input=reader.nextLine();System.out.println();
             if(input.equals("jump")){
-                jump.startJump(i);
-                jump.printSkiiers(skiier);
-                Random rand = new Random();
-                int jumps = rand.nextInt(100) + 60;
-                int votes = rand.nextInt(20) + 10;
-                
-                
+                jump.startJump(round);
+                jump.printSkiiers(this.skiier);
+                jump.jump(this.skiier);
+                jump.endRound(this.skiier, round);
+                round++;
             }
             else{
+                System.out.println("Thanks!");
+                Collections.sort(this.skiier);
+                jump.printFinal(this.skiier);
                 break;
             }
         }
