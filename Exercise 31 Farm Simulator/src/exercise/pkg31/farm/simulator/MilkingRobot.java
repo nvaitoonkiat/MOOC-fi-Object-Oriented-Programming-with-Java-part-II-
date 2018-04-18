@@ -7,19 +7,25 @@ package exercise.pkg31.farm.simulator;
 
 /**
  *
- * @author vaitnx
+ * @author Neil
  */
-public class MilkingRobot extends BulkTank {
+public class MilkingRobot {
+    private BulkTank bulkTank;
+    
     public MilkingRobot(){
-        
+        this.bulkTank = new BulkTank();
     }
     BulkTank getBulkTank(){
-        
+        return this.bulkTank;
     }
     void setBulkTank(BulkTank tank){
-        
+        this.bulkTank = tank;
     }
     void milk(Milkable milkable) {
-        
+     try {
+            this.bulkTank.addToTank(milkable.milk());
+        } catch (Exception e) {
+            throw new IllegalStateException();
+        }   
     }
 }
