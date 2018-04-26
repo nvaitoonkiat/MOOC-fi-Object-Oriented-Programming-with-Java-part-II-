@@ -33,37 +33,50 @@ public class Dungeon {
         this.vampires = vampires; this.moves = moves;
         this.vampiresMove = vampiresMove; this.dungeon = new int[height][length];
         this.characters = new ArrayList<>();
-        hashmap.put('w', new ArrayList<>(Arrays.asList(0, 1)));
-        hashmap.put('a', new ArrayList<>(Arrays.asList(-1, 0)));
-        hashmap.put('s', new ArrayList<>(Arrays.asList(0, -1)));
-        hashmap.put('d', new ArrayList<>(Arrays.asList(1, 0)));
+        hashmap.put('d', new ArrayList<>(Arrays.asList(0, 1)));
+        hashmap.put('w', new ArrayList<>(Arrays.asList(-1, 0)));
+        hashmap.put('a', new ArrayList<>(Arrays.asList(0, -1)));
+        hashmap.put('s', new ArrayList<>(Arrays.asList(1, 0)));
         
         
     }
     
     public void run(Scanner reader){
         initializeCharacters();
-        printMap();
-        while(this.moves > 0){
+        boolean youWonYet = false; 
+        while(this.moves > 0 && !youWonYet){
+            int vampiresKilled=0;
+            printMap();
+            //Check for win condition
+            for(Character character : this.characters){
+                if(character.getID()==2){
+                    if(character.getX() > 90000){
+                        vampiresKilled++;
+                        if(vampiresKilled == this.vampires){
+                            youWonYet = true;
+                        }
+                    }
+                }
+            }
             String temp="";
             boolean failed = false;
-            while(!failed){
+            boolean getOutOfLoopWhenFalse = true;
+            while(getOutOfLoopWhenFalse){
                 System.out.println("Enter move (series of wasd):");
                 temp = reader.nextLine();
-                for(int i = 0;!failed && i<temp.length(); i++){
+                for(int i = 0; i<temp.length()-1; i++){
                     failed = (temp.indexOf(VALIDCHARS.charAt(i))<0);
                 }
                 if(!failed){
-                    failed = true; //String passed test
+                    getOutOfLoopWhenFalse = false; //String passed test
                 }
                 else{
-                failed = false;
-                System.out.println("Not vaild command");
+                    System.out.println("Not vaild command");
                 }
             }
             move(temp);
         }
-        
+        System.out.println("GAME OVER!");
      
     }
     public void printMap(){
@@ -71,9 +84,13 @@ public class Dungeon {
         {
            for (int y : x)
            {
-               if(y == 0){
-                   System.out.print(y +" ");
+               if(y == 1){
+                   System.out.print("P ");
                }
+               else if(y == 2){
+                   System.out.print("V ");
+               }
+               
                else{
                 System.out.print(y + " ");
                }
@@ -97,6 +114,10 @@ public class Dungeon {
                continue;
            }
         }
+        System.out.println("GAME START! KILL ALL VAMPIRES(V)");
+//        for(Character character: this.characters){
+//            System.out.println("x: " + character.getX() + " y: "+  character.getY());
+//        }
     }
     public void move(String command){
         for(int i=0; i<command.length();i++){
@@ -105,6 +126,7 @@ public class Dungeon {
                     actuallyMove(character, seeIfAnythingOnTile(character, command.charAt(i)), command.charAt(i));
                 }
                 else{//vampire move
+                    
                     char vampMove = getRandomChar();
                     actuallyMove(character, seeIfAnythingOnTile(character, vampMove),vampMove);
                 }
@@ -112,6 +134,8 @@ public class Dungeon {
                 //character.move(command.charAt(i));
         }
         this.moves--;
+        System.out.println("\n\n\n");
+        System.out.println("You have this many moves left: " + this.moves); 
     }
     public char getRandomChar(){
         String wasd = "wasd";
@@ -120,34 +144,63 @@ public class Dungeon {
     }
 
     public int seeIfAnythingOnTile(Character character, char i){
-        int valueOfDungeonTile = this.dungeon[character.getX()+hashmap.get(i).get(0)][character.getY()+hashmap.get(i).get(1)];
-        return valueOfDungeonTile;
+        int valueOfDungeonTile = 1;
+        if((character.getX()+hashmap.get(i).get(0)) < 0 || character.getY()+hashmap.get(i).get(1)<0 
+                        || character.getY()+hashmap.get(i).get(1) > this.length-1 || (character.getX()+hashmap.get(i).get(0))>this.height-1 ){
+                    return valueOfDungeonTile;
+                }
+        else{
+            valueOfDungeonTile = this.dungeon[character.getX()+hashmap.get(i).get(0)][character.getY()+hashmap.get(i).get(1)];
+            return valueOfDungeonTile;
+        }
+       
     }
     
     public void actuallyMove(Character character,int valueOfDungeonTile, char i){
         switch(valueOfDungeonTile){
-            case 0:{
+            case 0:
+                //test
+                //System.out.println(character.ID + "x: " + (character.getX()+hashmap.get(i).get(0)) + " y: " +(character.getY()+hashmap.get(i).get(1)));
+                if((character.getX()+hashmap.get(i).get(0)) < 0 || character.getY()+hashmap.get(i).get(1)<0 
+                        || character.getY()+hashmap.get(i).get(1) > this.length-1 || (character.getX()+hashmap.get(i).get(0))>this.height-1 ){
+                    break;
+                }
+                else{
                 this.dungeon[character.getX()][character.getY()] = 0;
                 this.dungeon[character.getX()+hashmap.get(i).get(0)][character.getY()+hashmap.get(i).get(1)] = character.getID();
                 character.move(hashmap.get(i).get(0),hashmap.get(i).get(1));
-            }
-            case 1:{
                 
-            }
-            case 2:{
+                break;
+                }
+            case 1:break;
+                
+            
+            case 2:
+                if((character.getX()+hashmap.get(i).get(0)) < 0 || character.getY()+hashmap.get(i).get(1)<0 
+                        || character.getY()+hashmap.get(i).get(1) > this.length-1 || (character.getX()+hashmap.get(i).get(0))>this.height-1 ){
+                    break;
+                }
+                else{
                 int x = character.getX()+hashmap.get(i).get(0), y=character.getY()+hashmap.get(i).get(1);
                 if(character.getID() == 1){
                     this.dungeon[character.getX()][character.getY()] = 0; //move current position
                     this.dungeon[x][y] = character.getID(); //update new position
-                    character.move(hashmap.get(i).get(0),hashmap.get(i).get(1));
                     //remove vampire since player ate
                     for(int j = 0; j< this.characters.size();j++){
                         if(this.characters.get(j).getX() == x && this.characters.get(j).getY() == y){
-                            this.characters.remove(j);
+                            //this.characters.remove(j);
+                            this.characters.get(j).setX(99999);
+                             this.characters.get(j).setY(99999);
                         }
                     }
+                    character.move(hashmap.get(i).get(0),hashmap.get(i).get(1));
                 }
-            }
+                break;
+                }
+            
+            default:break;
+                
+            
         }
     }
 }//end class dungeon
