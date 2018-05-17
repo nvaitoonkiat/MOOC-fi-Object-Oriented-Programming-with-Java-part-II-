@@ -16,9 +16,11 @@ public class Exercise43GameOfLife {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        PersonalBoard board = new PersonalBoard(3, 3);
+        PersonalBoard board = new PersonalBoard(10, 10);
         board.initiateRandomCells(0.7);
         board.playTurn();
+        //System.out.println(board.getNumberOfLivingNeighbours(1, 2));
+        
 
     }
     
