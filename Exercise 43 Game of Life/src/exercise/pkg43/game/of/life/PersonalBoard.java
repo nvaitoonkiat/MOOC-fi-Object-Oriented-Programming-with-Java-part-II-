@@ -41,15 +41,44 @@ public class PersonalBoard extends GameOfLifeBoard{
                if((temp/2 + probabilityForEachCell) > 1){
                    this.turnToLiving(j, i);
                }
-               else{
-                  
-               }
             } 
         }   
+        setBoard2(getBoard());
     }
 
     @Override
     public int getNumberOfLivingNeighbours(int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int i[] = {-1,0,1,-1,1,-1,0,1};
+        int j[] = {-1,-1,-1,0,0,1,1,1};
+        int size = i.length;
+        int numberOfLiving = 0;
+        boolean gameBoard[][] = this.getBoard();
+            for(int k = 0; k < size; k++){
+                    try{
+                         if(isAlive(x+i[k], y+j[k])){
+                             numberOfLiving++;
+                         }
+                         else{
+                             continue;
+                         }
+                    }
+                    catch(Exception e){
+                        continue;
+                    }
+            }
+        return numberOfLiving;
+//            for (boolean[] q : this.getBoard()) //loop between 
+//          {
+//             for (boolean r : q)
+//             {
+//                     for(int k = 0; k < size; k++){
+//                         if(isAlive(i[k], j[k])){
+//
+//                         }
+//
+//                      }
+//
+//             }
+//          }  
     }
 }
